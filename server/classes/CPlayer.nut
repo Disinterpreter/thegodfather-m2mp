@@ -47,4 +47,3 @@ class CPlayer {
 		return getPlayerPing ( this.m_iID );
 	}
 };
-};
