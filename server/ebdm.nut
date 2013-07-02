@@ -1,3 +1,6 @@
+dofile ( "server/classes/CPlayer.nut" );
+dofile ( "server/includes/d_Each.nut" );
+
 local script = "Empire Bay Death Match";
 
 function scriptInit()
