@@ -1,0 +1,10 @@
+<meta>
+	<!-- Server side scripts -->
+	<script type="server">ebdm.nut</script>
+	<script type="server">classes/CPlayer.nut</script>
+	
+	<!-- Client side scripts -->
+	<script type="client">fps.nut</script>
+	<script type="client">nametags.nut</script>
+	<script type="client">scoreboard.nut</script>
+</meta>
