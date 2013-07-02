@@ -1,50 +1,37 @@
-class CPlayer
-{ 
+class CPlayer { 
 	m_iID = -1;
-	constructor( iPlayerID )
-	{
+	constructor( iPlayerID ) {
 		this.m_iID = iPlayerID;
 	}
-	function SendMessage ( sText )
-	{
-		return sendPlayerMessage ( this.m_iID, sText, iVargv[0], iVargv[1], iVargv[2] );
+	function SendMessage ( ... ) {
+		if ( !vargv[ 1 ] ) {
+			sendPlayerMessage ( this.m_iID, vargv[ 0 ].tostring() );
+		else
+			sendPlayerMessage ( this.m_iID, vargv[ 0 ].tostring(), vargv[ 1 ] );
+		return 1;
 	}
-	function SetPosition ( fX, fY, fZ )
-	{
-		return setPlayerPosition ( this.m_iID, fVargv[0], fVargv[1], fVargv[2] );
+	function SetPosition ( ... ) {
+		return setPlayerPosition ( this.m_iID, vargv[ 0 ].tofloat(), vargv[ 1 ].tofloat(), vargv[ 2 ].tofloat() );
 	}
-	function SetRotation ( fX, fY, fZ )
-	{
-		return setPlayerRotation ( this.m_iID, iVargv[0], iVargv[1], iVargv[2] );
+	function SetRotation ( ... ) {
+		return setPlayerRotation ( this.m_iID, vargv[ 0 ].tofloat(), vargv[ 1 ].tofloat(), vargv[ 2 ].tofloat() );
 	}
-	function SetHealth ( sHealth )
-	{
+	function gethealth() {
+		return getPlayerHealth ( this.m_iID );
+	}
+	function SetHealth ( sHealth ) {
 		return setPlayerHealth ( this.m_iID, sHealth );
 	}
-	function SetModel ( sModel )
-	{
-		return setPlayerModel ( this.m_iID, sModel );
+	function SetModel ( sModel ) {
+		return setPlayerModel ( this.m_iID, sModel);
 	}
-	function GiveWeapon ( iWeapon, iAmmo )
-	{
+	function GiveWeapon ( iWeapon, iAmmo ) {
 		return givePlayerWeapon ( this.m_iID, iWeapon, iAmmo );
 	}
-	function RemoveWeapon ( iWeapon )
-	{
+	function RemoveWeapon ( iWeapon ) {
 		return removePlayerWeapon ( this.m_iID, iWeapon );
 	}
-	function GetSerial ()
-	{
+	function GetSerial () {
 		return getPlayerSerial ( this.m_iID );
 	}
-	
 };
-
-function testf ( iPlayerID )
-{
-	local pPlayer = CPlayer( iPlayerID );
-	//pPlayer.SetHealth ( 500.0 );
-	pPlayer.SendMessage ( "test" );
-	pPlayer.SendMessage ( pPlayer.GetSerial () );
-}
-addCommandHandler ( "cmd", testf );
