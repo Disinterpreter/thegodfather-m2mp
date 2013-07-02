@@ -34,4 +34,17 @@ class CPlayer {
 	function GetSerial () {
 		return getPlayerSerial ( this.m_iID );
 	}
+	function getName (  )
+	{
+		return getPlayerName ( this.m_iID );
+	}
+	function getVehicle (  )
+	{
+		return getPlayerVehicle ( this.m_iID );
+	}
+	function getPing (  )
+	{
+		return getPlayerPing ( this.m_iID );
+	}
+};
 };
