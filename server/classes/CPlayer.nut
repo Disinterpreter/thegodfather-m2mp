@@ -9,10 +9,6 @@ class CPlayer
 	{
 		return sendPlayerMessage ( this.m_iID, sText );
 	}
-	function SendMessageToAll ( sText )
-	{
-		return sendPlayerMessageToAll ( sText );
-	}
 	function SetPosition ( fX, fY, fZ )
 	{
 		return setPlayerPosition ( this.m_iID, fX, fY, fZ );
