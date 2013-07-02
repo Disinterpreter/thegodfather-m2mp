@@ -7,15 +7,15 @@ class CPlayer
 	}
 	function SendMessage ( sText )
 	{
-		return sendPlayerMessage ( this.m_iID, sText );
+		return sendPlayerMessage ( this.m_iID, sText, iVargv[0], iVargv[1], iVargv[2] );
 	}
 	function SetPosition ( fX, fY, fZ )
 	{
-		return setPlayerPosition ( this.m_iID, fX, fY, fZ );
+		return setPlayerPosition ( this.m_iID, fVargv[0], fVargv[1], fVargv[2] );
 	}
 	function SetRotation ( fX, fY, fZ )
 	{
-		return setPlayerRotation ( this.m_iID, fX, fY, fZ );
+		return setPlayerRotation ( this.m_iID, iVargv[0], iVargv[1], iVargv[2] );
 	}
 	function SetHealth ( sHealth )
 	{
