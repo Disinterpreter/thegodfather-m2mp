@@ -11,16 +11,16 @@ class CPlayer {
 		return 1;
 	}
 	function SetPosition ( ... ) {
-		return setPlayerPosition ( this.m_iID, vargv[ 0 ].tofloat(), vargv[ 1 ].tofloat(), vargv[ 2 ].tofloat() );
+		return setPlayerPosition ( this.m_iID, fVargv[ 0 ].tofloat(), fVargv[ 1 ].tofloat(), fVargv[ 2 ].tofloat() );
 	}
 	function SetRotation ( ... ) {
-		return setPlayerRotation ( this.m_iID, vargv[ 0 ].tofloat(), vargv[ 1 ].tofloat(), vargv[ 2 ].tofloat() );
+		return setPlayerRotation ( this.m_iID, fVargv[ 0 ].tofloat(), fVargv[ 1 ].tofloat(), fVargv[ 2 ].tofloat() );
 	}
-	function gethealth() {
+	function GetHealth() {
 		return getPlayerHealth ( this.m_iID );
 	}
-	function SetHealth ( sHealth ) {
-		return setPlayerHealth ( this.m_iID, sHealth );
+	function SetHealth ( fHealth ) {
+		return setPlayerHealth ( this.m_iID, fHealth.tofloat() );
 	}
 	function SetModel ( sModel ) {
 		return setPlayerModel ( this.m_iID, sModel);
