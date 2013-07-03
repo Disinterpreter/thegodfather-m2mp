@@ -1,46 +1,50 @@
 class CPlayer { 
 	m_iID = -1;
+	name = "";
 	constructor( iPlayerID ) {
 		this.m_iID = iPlayerID;
+		this.name = getPlayerName ( iPlayerID );
 	}
-	function SendMessage ( ... ) {
-		if ( !vargv[ 1 ] ) {
-			sendPlayerMessage ( this.m_iID, vargv[ 0 ].tostring() );
-		else
-			sendPlayerMessage ( this.m_iID, vargv[ 0 ].tostring(), vargv[ 1 ] );
-		return 1;
+	function toggleControl( toggle ) {
+		togglePlayerControls( this.m_iID, toggle );
 	}
-	function SetPosition ( ... ) {
-		return setPlayerPosition ( this.m_iID, fVargv[ 0 ].tofloat(), fVargv[ 1 ].tofloat(), fVargv[ 2 ].tofloat() );
+	function getPosition ( ) {
+		return getPlayerPosition( this.m_iID )
 	}
-	function SetRotation ( ... ) {
-		return setPlayerRotation ( this.m_iID, fVargv[ 0 ].tofloat(), fVargv[ 1 ].tofloat(), fVargv[ 2 ].tofloat() );
+	function setPosition ( ... ) {
+		return setPlayerPosition ( this.m_iID, vargv[ 0 ].tofloat(), vargv[ 1 ].tofloat(), vargv[ 2 ].tofloat() );
 	}
-	function GetHealth() {
+	function setRotation ( ... ) {
+		return setPlayerRotation ( this.m_iID, vargv[ 0 ].tofloat(), vargv[ 1 ].tofloat(), vargv[ 2 ].tofloat() );
+	}
+	function getHealth ( ) {
 		return getPlayerHealth ( this.m_iID );
 	}
-	function SetHealth ( fHealth ) {
-		return setPlayerHealth ( this.m_iID, fHealth.tofloat() );
+	function setHealth ( sHealth ) {
+		return setPlayerHealth ( this.m_iID, sHealth.tofloat() );
 	}
-	function SetModel ( sModel ) {
-		return setPlayerModel ( this.m_iID, sModel);
+	function setModel ( sModel ) {
+		return setPlayerModel ( this.m_iID, sModel.tointeger() );
 	}
-	function GiveWeapon ( iWeapon, iAmmo ) {
+	function giveWeapon ( iWeapon, iAmmo ) {
 		return givePlayerWeapon ( this.m_iID, iWeapon, iAmmo );
 	}
-	function RemoveWeapon ( iWeapon ) {
+	function removeWeapon ( iWeapon ) {
 		return removePlayerWeapon ( this.m_iID, iWeapon );
 	}
-	function GetSerial () {
+	function getSerial ( ) {
 		return getPlayerSerial ( this.m_iID );
 	}
-	function getName() {
-		return getPlayerName ( this.m_iID );
+	function getName ( ) {
+		return name;
 	}
-	function getVehicle() {
+	function getVehicle ( ) {
 		return getPlayerVehicle ( this.m_iID );
 	}
-	function getPing() {
+	function getPing ( ) {
 		return getPlayerPing ( this.m_iID );
+	}
+	function setColor ( color ) {
+		return setPlayerColour( this.m_iID, color );
 	}
 };
