@@ -38,6 +38,9 @@ class CPlayer {
 	function getName ( ) {
 		return name;
 	}
+	function getNetStat ( ) {
+		return getPlayerNetworkStats( tihs.m_iID ) ;
+	}
 	function getVehicle ( ) {
 		return getPlayerVehicle ( this.m_iID );
 	}
