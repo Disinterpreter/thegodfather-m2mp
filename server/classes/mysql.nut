@@ -21,11 +21,11 @@ class mySql
 				playerData[ playerid ].Admin 	= mysql_fetch_field_row( cMySQL, 4 );
 				playerData[ playerid ].Logged 	= 1;
 
-				sendPlayerMessage( playerid, "Вы успешно авторизовались." );
+				sendPlayerMessage( playerid, "Р’С‹ СѓСЃРїРµС€РЅРѕ Р°РІС‚РѕСЂРёР·РѕРІР°Р»РёСЃСЊ." );
 				player[ playerid ].setModel( playerData[ playerid ].Skin );
 				player[ playerid ].toggleControl( true ) ;
 		}
-        else sendPlayerMessage( playerid, "Вы ввели неверный пароль." );							
+        else sendPlayerMessage( playerid, "Р’С‹ РІРІРµР»Рё РЅРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ" );							
 		mysql_free_result( cMySQL ) ;		
 	}
 	
