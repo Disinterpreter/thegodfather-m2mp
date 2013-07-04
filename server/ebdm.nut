@@ -174,6 +174,7 @@ addCommandHandler( "login",
 			mysql_free_result( cMySQL ) ;
 		} else {
 			sendPlayerMessage( playerid, "Вы уже авторизованы." );
+<<<<<<< HEAD
 		}
 	}
 );
@@ -223,6 +224,8 @@ addCommandHandler( "a",
 					}
 				}
 			);
+=======
+>>>>>>> 4d18147e44855efc7c9cb0f4316e770a2d25d721
 		}
 	}
 );
