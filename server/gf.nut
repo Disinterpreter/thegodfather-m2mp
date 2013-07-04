@@ -1,4 +1,5 @@
-dofile( "resources/default/server/classes/CPlayer.nut" );
+﻿dofile( "resources/default/server/classes/CPlayer.nut" );
+dofile( "resources/default/server/classes/CMysql.nut" );
 dofile( "resources/default/server/events/event.nut" );
 dofile( "resources/default/server/includes/d_Each.nut" );
 dofile( "resources/default/server/functions/function.nut" );
@@ -6,7 +7,7 @@ dofile( "resources/default/server/functions/function.nut" );
 
 /*Local*/
 local player = { };
-local cMySQL;
+local mysql = CMysql( );
 local gAccount = array( getMaxPlayers() ) ;
 local playerData = { };
 
@@ -25,7 +26,7 @@ addEventHandler( "onScriptInit",
 		setGameModeText( "The Godfather v 0.1" );
 		setMapName( "Empire Bay" );
 		
-		cMySQL = mysql_connect( SQL_HOST, SQL_USER, SQL_PASS, SQL_DB );
+		mysql.connect( SQL_HOST, SQL_USER, SQL_PASS, SQL_DB ) ;
 		
 		 timer ( 
 			function( ) {
@@ -65,16 +66,16 @@ addEventHandler( "onPlayerConnect",
 		sendPlayerMessage( playerid, "Добро пожаловать на " + scriptName );
 		sendPlayerMessage( playerid, "Чтобы прочесть правила нашего сервера нажмите F10" );
 		
-		mysql_query( cMySQL, "SELECT `Name` FROM `accounts` WHERE `Name` = '" + player[ playerid ].getName() +"'" );
-		mysql_store_result( cMySQL );
-		if ( mysql_num_rows( cMySQL ) ) {
+		mysql.query( "SELECT `Name` FROM `accounts` WHERE `Name` = '" + player[ playerid ].getName() +"'" );
+		mysql.store_result( );
+		if ( mysql.num_rows( ) ) {
 			sendPlayerMessage( playerid, "Ваш аккаунт зарегистрирован, пройдите процесс авторизации коммандой /login password.", 255, 204, 0 );
 			gAccount[ playerid ] = 1;
 		} else {
 			sendPlayerMessage( playerid, "Этот аккаунт не зарегистрирован, пройдите процесс регистрации коммандой /register password.", 255, 204, 0 );
 			gAccount[ playerid ] = 0;
 		}
-		mysql_free_result( cMySQL ) ;
+		mysql.free_result( ) ;
 	}
 );
 
@@ -113,7 +114,7 @@ addEventHandler( "onPlayerDeath",
 
 this.playerSave <- function( playerid ) {
 	if ( playerData[ playerid ].Logged == 1 ) {
-		mysql_query( cMySQL, "UPDATE `accounts` SET `Admin` = '" + playerData[ playerid ].Admin + "', `Skin` = '" + playerData[ playerid ].Skin + "' WHERE `Name` = '" + player[ playerid ].getName( ) + "'" ) ;
+		mysql.query( "UPDATE `accounts` SET `Admin` = '" + playerData[ playerid ].Admin + "', `Skin` = '" + playerData[ playerid ].Skin + "' WHERE `Name` = '" + player[ playerid ].getName( ) + "'" ) ;
 	}
     
     return 1 ;
@@ -142,7 +143,7 @@ addCommandHandler( "register",
 	function( playerid, password ) {
 		if( playerData[ playerid ].Logged == 0 ) {
 			if ( gAccount[ playerid ] == 1 ) return sendPlayerMessage( playerid, "Этот аккаунт уже зарегистрирован!" ) ;
-			mysql_query( cMySQL, "INSERT INTO `accounts` ( `Name`, `Password`, `Skin`, `Admin` ) VALUES ( '" + player[ playerid ].getName() + "', '" + md5( password ) + "', '1', '0' )" ) ;
+			mysql.query( "INSERT INTO `accounts` ( `Name`, `Password`, `Skin`, `Admin` ) VALUES ( '" + player[ playerid ].getName() + "', '" + md5( password ) + "', '1', '0' )" ) ;
 			sendPlayerMessage( playerid, "Вы успешно зарегистрировались." ) ;
 			player[ playerid ].toggleControl( true ) ;
 		} else {
@@ -158,11 +159,11 @@ addCommandHandler( "login",
 				return sendPlayerMessage( playerid, "Такого аккаунта не существует!" ) ;
 			}
 			
-			mysql_query( cMySQL, "Select * FROM `accounts` WHERE `Name` = '" + player[ playerid ].getName() +"' AND `Password` = '" + md5( password ) + "'" );
-			mysql_store_result( cMySQL ) ;
-			if ( mysql_fetch_row( cMySQL ) ) {
-				playerData[ playerid ].Skin 	= mysql_fetch_field_row( cMySQL, 3 );
-				playerData[ playerid ].Admin 	= mysql_fetch_field_row( cMySQL, 4 );
+			mysql.query( "Select * FROM `accounts` WHERE `Name` = '" + player[ playerid ].getName() +"' AND `Password` = '" + md5( password ) + "'" );
+			mysql.store_result( ) ;
+			if ( mysql.fetch_row( ) ) {
+				playerData[ playerid ].Skin 	= mysql.fetch_field_row( 3 );
+				playerData[ playerid ].Admin 	= mysql.fetch_field_row( 4 );
 				playerData[ playerid ].Logged 	= 1;
 				
 				sendPlayerMessage( playerid, "Вы успешно авторизовались." );
@@ -171,7 +172,7 @@ addCommandHandler( "login",
 			} else {
 				sendPlayerMessage( playerid, "Вы ввели неверный пароль." );
 			}
-			mysql_free_result( cMySQL ) ;
+			mysql.free_result( ) ;
 		} else {
 			sendPlayerMessage( playerid, "Вы уже авторизованы." );
 		}
@@ -184,8 +185,9 @@ addCommandHandler( "kick",
 			if ( !isPlayerConnected( giveplayerid.tointeger( ) ) ) {
 				return sendPlayerMessage( playerid, "Игрок " + giveplayerid.tointeger() + " не в сети" );
 			}
+			
+			sendPlayerMessageToAll( "Администратор '" + player[ playerid ].getName( ) + "' кикнул '" + player[ giveplayerid.tointeger( ) ].getName( ) + "'! Причина: '" + text.tostring() + "'");
 			kickPlayer( giveplayerid.tointeger() ) ;
-			sendPlayerMessageToAll( "Администратор '" + player[ playerid ].getName( ) + "' кикнул '" + player[ id.tointeger( ) ].getName( ) + "'! Причина: '" + text.tostring() + "'");
 		}
 	}
 );
@@ -196,7 +198,7 @@ addCommandHandler( "getns",
 			if ( !isPlayerConnected( giveplayerid.tointeger( ) ) ) {
 				return sendPlayerMessage( playerid, "Игрок " + giveplayerid.tointeger() + " не в сети" );
 			}
-			sendPlayerMessage( playerid, "Network Stats игрока '" + player[ giveplayerid.tointeger( ) ].getName( ) + "' : " + player[ id.tointeger( ) ].getNetStat( ) );
+			sendPlayerMessage( playerid, "Network Stats игрока '" + player[ giveplayerid.tointeger( ) ].getName( ) + "' : " + player[ giveplayerid.tointeger( ) ].getNetStat( ) );
 		}
 	}
 );
@@ -207,8 +209,11 @@ addCommandHandler( "setmodel",
 			if ( !isPlayerConnected( giveplayerid.tointeger( ) ) ) {
 				return sendPlayerMessage( playerid, "Игрок " + giveplayerid.tointeger() + " не в сети" );
 			}
+			
 			sendPlayerMessage( playerid, "Вы установили игроку " + player[ giveplayerid.tointeger( ) ].getName ( ) + " " + skin.tointeger( ) + " модель" ) ;
 			sendPlayerMessage( giveplayerid.tointeger( ), "Администратор " + player[ playerid.tointeger( ) ].getName ( ) + " установил вам " + skin.tointeger( ) + " модель" ) ;
+			playerData[ giveplayerid.tointeger( ) ].Skin = skin.tointeger( ) ;
+			player[ giveplayerid.tointeger( ) ].setModel( playerData[ giveplayerid.tointeger( ) ].Skin );
 		}
 	}
 );
@@ -219,7 +224,7 @@ addCommandHandler( "a",
 			dIter(
 				function( id ) {
 					if ( playerData[ id ].Admin.tointeger( ) > 0 ) {
-						sendPlayerMessage( id, "[A] Администратор: " + player[ playerid ].getName( ) + text.tostring() ) ;
+						sendPlayerMessage( id, "[A] Администратор: " + player[ playerid ].getName( ) + ": " + text.tostring() ) ;
 					}
 				}
 			);
