@@ -47,7 +47,7 @@ class CPlayer {
 	function getPing ( ) {
 		return getPlayerPing ( this.m_iID );
 	}
-	function setColor ( color ) {
-		return setPlayerColour( this.m_iID, color );
+	function setColor ( sColor ) {
+		return setPlayerColour( this.m_iID, sColor );
 	}
 };

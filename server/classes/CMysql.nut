@@ -5,8 +5,8 @@ class CMysql {
 		return mysql_connect( iSQL_HOST, iSQL_USER, iSQL_PASS, iSQL_DB ) ;
 	}
 	
-	function query ( query ) {
-		return mysql_query( this.m_iID, query ) ;
+	function query ( sQuery ) {
+		return mysql_query( this.m_iID, sQuery ) ;
 	}
 	
 	function store_result ( ) {
@@ -25,7 +25,7 @@ class CMysql {
 		return mysql_num_rows( this.m_iID ) ;
 	}
 	
-	function fetch_field_row ( fieldIndex ) {
-		return mysql_fetch_field_row ( this.m_iID, fieldIndex ) ;
+	function fetch_field_row ( sFieldIndex ) {
+		return mysql_fetch_field_row ( this.m_iID, sFieldIndex ) ;
 	}
 };
