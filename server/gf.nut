@@ -1,4 +1,4 @@
-﻿dofile( "resources/default/server/classes/CPlayer.nut" );
+dofile( "resources/default/server/classes/CPlayer.nut" );
 dofile( "resources/default/server/events/event.nut" );
 dofile( "resources/default/server/includes/d_Each.nut" );
 dofile( "resources/default/server/functions/function.nut" );
@@ -174,7 +174,6 @@ addCommandHandler( "login",
 			mysql_free_result( cMySQL ) ;
 		} else {
 			sendPlayerMessage( playerid, "Вы уже авторизованы." );
-<<<<<<< HEAD
 		}
 	}
 );
@@ -224,8 +223,6 @@ addCommandHandler( "a",
 					}
 				}
 			);
-=======
->>>>>>> 4d18147e44855efc7c9cb0f4316e770a2d25d721
 		}
 	}
 );
@@ -281,7 +278,7 @@ addCommandHandler( "sethp",
 );
 
 addCommandHandler( "ooc",
-    function( playerid, text ) {
+	function( playerid, text ) {
         if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
             sendPlayerMessageToAll( "Администратор: " + player[ playerid ].getName( ) + " [ " + playerid + " ]: " + text.tostring( ) );
         } else {
@@ -293,29 +290,29 @@ addCommandHandler( "ooc",
 addCommandHandler( "vehicle",
     function( playerid, ... ) {
         if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
-            local 	id		=	vargv[ 0 ] ,
-					pos 	= getPlayerPosition( playerid ) ,
-					vehicle = createVehicle( id.tointeger(), pos[0] + 2.0, pos[1], pos[2] + 1.0, 0.0, 0.0, 0.0 );
+   		local 	id 	= vargv[ 0 ] ,
+			pos 	= getPlayerPosition( playerid ) ,
+			vehicle = createVehicle( id.tointeger(), pos[0] + 2.0, pos[1], pos[2] + 1.0, 0.0, 0.0, 0.0 );
 					
-            setVehicleColour ( vehicle, 255, 0, 255, 0, 255, 255 );
+    		setVehicleColour ( vehicle, 255, 0, 255, 0, 255, 255 );
         } else {
             sendPlayerMessage( playerid, youCanNot );
-		}
+	}
     }
 );
 
 addCommandHandler( "setadmin",
     function( playerid, id ) {
         if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
-			if ( !isPlayerConnected( id.tointeger( ) ) ) { 
-				return sendPlayerMessage( playerid, "Игрок " + id.tointeger( ) + " не в сети" );
-			}
+		if ( !isPlayerConnected( id.tointeger( ) ) ) { 
+			return sendPlayerMessage( playerid, "Игрок " + id.tointeger( ) + " не в сети" );
+		}
 			
-			playerData[ id.tointeger( ) ].Admin = 1;
-            sendPlayerMessage( id.tointeger( ), "Администратор " + player[ playerid ].getName( ) + " назначил вас администратором!" );
-			sendPlayerMessage( playerid, "Вы назначили администратором " + player[ id.tointeger( ) ].getName( ) );
+		playerData[ id.tointeger( ) ].Admin = 1;
+            	sendPlayerMessage( id.tointeger( ), "Администратор " + player[ playerid ].getName( ) + " назначил вас администратором!" );
+		sendPlayerMessage( playerid, "Вы назначили администратором " + player[ id.tointeger( ) ].getName( ) );
         } else {
             sendPlayerMessage( playerid, youCanNot );
-		}
+	}
     }
 );
