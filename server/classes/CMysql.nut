@@ -16,7 +16,7 @@ class CMySQL {
 	
 	function store ( ) {
 		mysql_store_result( this.m_iID ) ;
-		this.iN=this.num;
+		this.iN=this.num( );
 		return 1;
 	}
 	
