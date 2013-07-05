@@ -5,6 +5,9 @@ class CPlayer {
 		this.m_iID = iPlayerID;
 		this.name = getPlayerName ( iPlayerID );
 	}
+	function message ( sText, iRed = 255, iGreen = 255, iBlue = 255 ) {
+		return sendPlayerMessage ( this.m_iID, sText, iRed, iGreen, iBlue );
+	}
 	function toggleControl( toggle ) {
 		togglePlayerControls( this.m_iID, toggle );
 	}
