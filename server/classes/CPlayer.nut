@@ -15,10 +15,10 @@ class CPlayer {
 		return getPlayerPosition( this.m_iID )
 	}
 	function setPosition ( ... ) {
-		return setPlayerPosition ( this.m_iID, fPosX.tofloat(), fPosY.tofloat(), fPosZ.tofloat() );
+		return setPlayerPosition ( this.m_iID, vargv[ 0 ].tofloat(), vargv[ 1 ].tofloat(), vargv[ 2 ].tofloat() );
 	}
 	function setRotation ( ... ) {
-		return setPlayerRotation ( this.m_iID, fRotX.tofloat(), fRotY.tofloat(), fRotZ.tofloat() );
+		return setPlayerRotation ( this.m_iID, vargv[ 0 ].tofloat(), vargv[ 1 ].tofloat(), vargv[ 2 ].tofloat() );
 	}
 	function getHealth ( ) {
 		return getPlayerHealth ( this.m_iID );

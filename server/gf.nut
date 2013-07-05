@@ -1,4 +1,4 @@
-п»їdofile( "resources/default/server/classes/CPlayer.nut" );
+dofile( "resources/default/server/classes/CPlayer.nut" );
 dofile( "resources/default/server/classes/CMysql.nut" );
 dofile( "resources/default/server/events/event.nut" );
 dofile( "resources/default/server/includes/d_Each.nut" );
@@ -13,7 +13,7 @@ local playerData = { };
 
 /*Const*/
 const scriptName 	= "The Godfather";
-const youCanNot 	= "Р’Р°Рј РЅРµРґРѕСЃС‚СѓРїРЅР° РґР°РЅРЅР°СЏ С„СѓРЅРєС†РёСЏ.";
+const youCanNot 	= "Вам недоступна данная функция.";
 
 const SQL_HOST		= "localhost";
 const SQL_DB		= "m2mp";
@@ -34,7 +34,7 @@ addEventHandler( "onScriptInit",
 					function ( id ) {
 						if ( isPlayerSpawned( id ) )  {
 							local health = player[ id ].getHealth( );
-							health < 250.0  && sendPlayerMessage( id, "Р’С‹ РїСЂРѕРіРѕР»РѕРґР°Р»РёСЃСЊ. Р’Р°Рј СЃСЂРѕС‡РЅРѕ РЅСѓР¶РЅРѕ РїРѕРµСЃС‚СЊ!" ), player[ id ].setHealth( --health ) ;
+							health < 250.0  && player[ id ].message( "Вы проголодались. Вам срочно нужно поесть!" ), player[ id ].setHealth( --health ) ;
 						}
 					}
 				);
@@ -61,18 +61,18 @@ addEventHandler( "onPlayerConnect",
 		playerData[ playerid ].Admin 	<- 0;
 		playerData[ playerid ].Skin 	<- 1;
 		
-		sendPlayerMessageToAll( "~ " + player[ playerid ].getName() + " РїСЂРёСЃРѕРµРґРёРЅРёР»СЃСЏ. РЎРµР№С‡Р°СЃ РёРіСЂРѕРєРѕРІ РЅР° СЃРµСЂРІРµСЂРµ: " + getPlayerCount() + "/" + getMaxPlayers(), 0, 255, 0 );
+		sendPlayerMessageToAll( "~ " + player[ playerid ].getName() + " присоединился. Сейчас игроков на сервере: " + getPlayerCount() + "/" + getMaxPlayers(), 0, 255, 0 );
 		
-		sendPlayerMessage( playerid, "Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РЅР° " + scriptName );
-		sendPlayerMessage( playerid, "Р§С‚РѕР±С‹ РїСЂРѕС‡РµСЃС‚СЊ РїСЂР°РІРёР»Р° РЅР°С€РµРіРѕ СЃРµСЂРІРµСЂР° РЅР°Р¶РјРёС‚Рµ F10" );
+		player[ playerid ].message( "Добро пожаловать на " + scriptName );
+		player[ playerid ].message( "Чтобы прочесть правила нашего сервера нажмите F10" );
 		
 		mysql.query( "SELECT `Name` FROM `accounts` WHERE `Name` = '" + player[ playerid ].getName() +"'" );
 		mysql.store_result( );
 		if ( mysql.num_rows( ) ) {
-			sendPlayerMessage( playerid, "Р’Р°С€ Р°РєРєР°СѓРЅС‚ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ, РїСЂРѕР№РґРёС‚Рµ РїСЂРѕС†РµСЃСЃ Р°РІС‚РѕСЂРёР·Р°С†РёРё РєРѕРјРјР°РЅРґРѕР№ /login password.", 255, 204, 0 );
+			player[ playerid ].message( "Ваш аккаунт зарегистрирован, пройдите процесс авторизации коммандой /login password.", 255, 204, 0 );
 			gAccount[ playerid ] = 1;
 		} else {
-			sendPlayerMessage( playerid, "Р­С‚РѕС‚ Р°РєРєР°СѓРЅС‚ РЅРµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ, РїСЂРѕР№РґРёС‚Рµ РїСЂРѕС†РµСЃСЃ СЂРµРіРёСЃС‚СЂР°С†РёРё РєРѕРјРјР°РЅРґРѕР№ /register password.", 255, 204, 0 );
+			player[ playerid ].message( "Этот аккаунт не зарегистрирован, пройдите процесс регистрации коммандой /register password.", 255, 204, 0 );
 			gAccount[ playerid ] = 0;
 		}
 		mysql.free_result( ) ;
@@ -82,7 +82,7 @@ addEventHandler( "onPlayerConnect",
 addEventHandler( "onPlayerDisconnect",
 	function( playerid, reason ) {
 		playerSave( playerid ) ;
-		sendPlayerMessageToAll( "~ " + player[ playerid ].getName( ) + " РѕС‚РєР»СЋС‡РёР»СЃСЏ.", 255, 0, 23 );
+		sendPlayerMessageToAll( "~ " + player[ playerid ].getName( ) + " отключился.", 255, 0, 23 );
 		delete player[ playerid ] ;
 		delete playerData[ playerid ] ;
 	}
@@ -100,7 +100,7 @@ addEventHandler( "onPlayerSpawn",
 addEventHandler( "onPlayerChat",
 	function( playerid, chattext ) {
 		local pos = player[ playerid ].getPosition( );
-		return sendMessageToAllInRadius( "- " + player[ playerid ].getName() + " СЃРєР°Р·Р°Р»: " + chattext, pos[ 0 ], pos[ 1 ], pos[ 2 ] );
+		return sendMessageToAllInRadius( "- " + player[ playerid ].getName() + " сказал: " + chattext, pos[ 0 ], pos[ 1 ], pos[ 2 ] );
 	}
 );
 
@@ -125,29 +125,29 @@ this.playerSave <- function( playerid ) {
 addCommandHandler( "w",
 	function( playerid, giveplayerid, text ) {
 		if ( !isPlayerConnected( giveplayerid.tointeger( ) ) ) {
-			return sendPlayerMessage( playerid, "РРіСЂРѕРє " + giveplayerid.tointeger() + " РЅРµ РІ СЃРµС‚Рё" );
+			return player[ playerid ].message( "Игрок " + giveplayerid.tointeger() + " не в сети" );
 		}
-		sendPlayerMessage( giveplayerid.tointeger(), "РћС‚ " + player[ playerid ].getName( ) + " [" + playerid + "]: " + text );
-		sendPlayerMessage( playerid, "Рљ " + player[ giveplayerid.tointeger( ) ].getName( ) + " [" + giveplayerid.tointeger( ) + "]: " + text );
+		player[ giveplayerid.tointeger( ) ].message(  "От " + player[ playerid ].getName( ) + " [" + playerid + "]: " + text );
+		player[ playerid ].message( "К " + player[ giveplayerid.tointeger( ) ].getName( ) + " [" + giveplayerid.tointeger( ) + "]: " + text );
 	}
 );
 
 addCommandHandler( "s",
 	function( playerid, text ) {
 		local position = player[ playerid ].getPosition( );
-		sendMessageToAllInRadius( "- " + player[ playerid ].getName( ) + " РєСЂРёРєРЅСѓР»: " + text, position[ 0 ], position[ 1 ], position[ 2 ], 40.0 );
+		sendMessageToAllInRadius( "- " + player[ playerid ].getName( ) + " крикнул: " + text, position[ 0 ], position[ 1 ], position[ 2 ], 40.0 );
 	}
 );
 
 addCommandHandler( "register",
 	function( playerid, password ) {
 		if( playerData[ playerid ].Logged == 0 ) {
-			if ( gAccount[ playerid ] == 1 ) return sendPlayerMessage( playerid, "Р­С‚РѕС‚ Р°РєРєР°СѓРЅС‚ СѓР¶Рµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ!" ) ;
+			if ( gAccount[ playerid ] == 1 ) return player[ playerid ].message( "Этот аккаунт уже зарегистрирован!" ) ;
 			mysql.query( "INSERT INTO `accounts` ( `Name`, `Password`, `Skin`, `Admin` ) VALUES ( '" + player[ playerid ].getName() + "', '" + md5( password ) + "', '1', '0' )" ) ;
-			sendPlayerMessage( playerid, "Р’С‹ СѓСЃРїРµС€РЅРѕ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°Р»РёСЃСЊ." ) ;
+			player[ playerid ].message( "Вы успешно зарегистрировались." ) ;
 			player[ playerid ].toggleControl( true ) ;
 		} else {
-			sendPlayerMessage(playerid, "Р’С‹ СѓР¶Рµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅС‹.");
+			player[ playerid ].message( "Вы уже авторизованы.");
 		}
 	}
 );
@@ -156,7 +156,7 @@ addCommandHandler( "login",
 	function( playerid, password ) {
 		if( playerData[ playerid ].Logged == 0 ) {
 			if ( gAccount[ playerid ] == 0 ) { 
-				return sendPlayerMessage( playerid, "РўР°РєРѕРіРѕ Р°РєРєР°СѓРЅС‚Р° РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚!" ) ;
+				return player[ playerid ].message( "Такого аккаунта не существует!" ) ;
 			}
 			
 			mysql.query( "Select * FROM `accounts` WHERE `Name` = '" + player[ playerid ].getName() +"' AND `Password` = '" + md5( password ) + "'" );
@@ -166,15 +166,15 @@ addCommandHandler( "login",
 				playerData[ playerid ].Admin 	= mysql.fetch_field_row( 4 );
 				playerData[ playerid ].Logged 	= 1;
 				
-				sendPlayerMessage( playerid, "Р’С‹ СѓСЃРїРµС€РЅРѕ Р°РІС‚РѕСЂРёР·РѕРІР°Р»РёСЃСЊ." );
+				player[ playerid ].message( "Вы успешно авторизовались." );
 				player[ playerid ].setModel( playerData[ playerid ].Skin );
 				player[ playerid ].toggleControl( true ) ;
 			} else {
-				sendPlayerMessage( playerid, "Р’С‹ РІРІРµР»Рё РЅРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ." );
+				player[ playerid ].message( "Вы ввели неверный пароль." );
 			}
 			mysql.free_result( ) ;
 		} else {
-			sendPlayerMessage( playerid, "Р’С‹ СѓР¶Рµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅС‹." );
+			player[ playerid ].message( "Вы уже авторизованы." );
 		}
 	}
 );
@@ -183,10 +183,10 @@ addCommandHandler( "kick",
 	function( playerid, giveplayerid, text ) {
 		if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
 			if ( !isPlayerConnected( giveplayerid.tointeger( ) ) ) {
-				return sendPlayerMessage( playerid, "РРіСЂРѕРє " + giveplayerid.tointeger() + " РЅРµ РІ СЃРµС‚Рё" );
+				return player[ playerid ].message( "Игрок " + giveplayerid.tointeger() + " не в сети" );
 			}
 			
-			sendPlayerMessageToAll( "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ '" + player[ playerid ].getName( ) + "' РєРёРєРЅСѓР» '" + player[ giveplayerid.tointeger( ) ].getName( ) + "'! РџСЂРёС‡РёРЅР°: '" + text.tostring() + "'");
+			sendPlayerMessageToAll( "Администратор '" + player[ playerid ].getName( ) + "' кикнул '" + player[ giveplayerid.tointeger( ) ].getName( ) + "'! Причина: '" + text.tostring() + "'");
 			kickPlayer( giveplayerid.tointeger() ) ;
 		}
 	}
@@ -196,9 +196,9 @@ addCommandHandler( "getns",
 	function( playerid, giveplayerid ) {
 		if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
 			if ( !isPlayerConnected( giveplayerid.tointeger( ) ) ) {
-				return sendPlayerMessage( playerid, "РРіСЂРѕРє " + giveplayerid.tointeger() + " РЅРµ РІ СЃРµС‚Рё" );
+				return player[ playerid ].message( "Игрок " + giveplayerid.tointeger() + " не в сети" );
 			}
-			sendPlayerMessage( playerid, "Network Stats РёРіСЂРѕРєР° '" + player[ giveplayerid.tointeger( ) ].getName( ) + "' : " + player[ giveplayerid.tointeger( ) ].getNetStat( ) );
+			player[ playerid ].message( "Network Stats игрока '" + player[ giveplayerid.tointeger( ) ].getName( ) + "' : " + player[ giveplayerid.tointeger( ) ].getNetStat( ) );
 		}
 	}
 );
@@ -206,12 +206,10 @@ addCommandHandler( "getns",
 addCommandHandler( "setmodel",
 	function( playerid, giveplayerid, skin ) {
 		if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
-			if ( !isPlayerConnected( giveplayerid.tointeger( ) ) ) {
-				return sendPlayerMessage( playerid, "РРіСЂРѕРє " + giveplayerid.tointeger() + " РЅРµ РІ СЃРµС‚Рё" );
-			}
+			if ( !isPlayerConnected( giveplayerid.tointeger( ) ) ) return player[ playerid ].message( "Игрок " + giveplayerid.tointeger() + " не в сети" );
 			
-			sendPlayerMessage( playerid, "Р’С‹ СѓСЃС‚Р°РЅРѕРІРёР»Рё РёРіСЂРѕРєСѓ " + player[ giveplayerid.tointeger( ) ].getName ( ) + " " + skin.tointeger( ) + " РјРѕРґРµР»СЊ" ) ;
-			sendPlayerMessage( giveplayerid.tointeger( ), "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ " + player[ playerid.tointeger( ) ].getName ( ) + " СѓСЃС‚Р°РЅРѕРІРёР» РІР°Рј " + skin.tointeger( ) + " РјРѕРґРµР»СЊ" ) ;
+			player[ playerid ].message( "Вы установили игроку " + player[ giveplayerid.tointeger( ) ].getName ( ) + " " + skin.tointeger( ) + " модель" ) ;
+			player[ giveplayerid.tointeger( ) ].message( "Администратор " + player[ playerid.tointeger( ) ].getName ( ) + " установил вам " + skin.tointeger( ) + " модель" ) ;
 			playerData[ giveplayerid.tointeger( ) ].Skin = skin.tointeger( ) ;
 			player[ giveplayerid.tointeger( ) ].setModel( playerData[ giveplayerid.tointeger( ) ].Skin );
 		}
@@ -224,7 +222,7 @@ addCommandHandler( "a",
 			dIter(
 				function( id ) {
 					if ( playerData[ id ].Admin.tointeger( ) > 0 ) {
-						sendPlayerMessage( id, "[A] РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ: " + player[ playerid ].getName( ) + ": " + text.tostring() ) ;
+						player[ id ].message( "[A] Администратор: " + player[ playerid ].getName( ) + ": " + text.tostring() ) ;
 					}
 				}
 			);
@@ -236,16 +234,16 @@ addCommandHandler( "goto",
     function( playerid, id ) {
         if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
 			if ( !isPlayerConnected( id.tointeger( ) ) ) { 
-				return sendPlayerMessage( playerid, "РРіСЂРѕРє " + id.tointeger( ) + " РЅРµ РІ СЃРµС‚Рё" );
+				return player[ playerid ].message( "Игрок " + id.tointeger( ) + " не в сети" );
 			}
 			
             local pos = player[ id ].getPosition( ) ;
 			
             setPlayerPosition( playerid, ( pos[ 0 ] + 1 ).tofloat( ), ( pos[ 1 ] + 1 ).tofloat( ), ( pos[ 2 ] ).tofloat( ) );
-            sendPlayerMessage( playerid, "Р’С‹ С‚РµР»РµРїРѕСЂС‚РёСЂРѕРІР°Р»РёСЃСЊ Рє " + player[ id ].getName( ) );
-            sendPlayerMessage( id, "Рљ РІР°Рј С‚РµР»РµРїРѕСЂС‚РёСЂРѕРІР°Р»СЃСЏ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ " + player[ playerid ].getName( ) );
+            player[ playerid ].message( "Вы телепортировались к " + player[ id ].getName( ) );
+            player[ id.tointeger( ) ].message( "К вам телепортировался администратор " + player[ playerid ].getName( ) );
         } else {
-            sendPlayerMessage( playerid, youCanNot );
+            player[ playerid ].message( youCanNot );
         }
    }
 );
@@ -254,16 +252,16 @@ addCommandHandler( "get",
     function( playerid, id ) {
         if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
 			if ( !isPlayerConnected( id.tointeger( ) ) ) { 
-				return sendPlayerMessage( playerid, "РРіСЂРѕРє " + id.tointeger( ) + " РЅРµ РІ СЃРµС‚Рё" );
+				return player[ playerid ].message( "Игрок " + id.tointeger( ) + " не в сети" );
 			}
 			
             local pos = player[ playerid ].getPosition( );
 			
             setPlayerPosition( id.tointeger( ), ( pos[ 0 ] + 1 ).tofloat( ), ( pos[ 1 ] + 1 ).tofloat( ), ( pos[ 2 ] ).tofloat( ) );
-            sendPlayerMessage( playerid, "Р’С‹ С‚РµР»РµРїРѕСЂС‚РёСЂРѕРІР°Р»Рё " + player[ id.tointeger( ) ].getName( ) + " Рє СЃРµР±Рµ." );
-            sendPlayerMessage( id.tointeger( ), "Р’Р°СЃ С‚РµР»РµРїРѕСЂС‚РёСЂРѕРІР°Р» Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ " + player[ playerid ].getName( ) );
+            player[ playerid ].message( "Вы телепортировали " + player[ id.tointeger( ) ].getName( ) + " к себе." );
+            player[ id.tointeger( ) ].message( "Вас телепортировал администратор " + player[ playerid ].getName( ) );
         } else {
-            sendPlayerMessage( playerid, youCanNot );
+            player[ playerid ].message( youCanNot );
         }
 	}
 );
@@ -272,12 +270,12 @@ addCommandHandler( "sethp",
     function( playerid, id, hp ) {
         if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
 			if ( !isPlayerConnected( id.tointeger( ) ) ) { 
-				return sendPlayerMessage( playerid, "РРіСЂРѕРє " + id.tointeger( ) + " РЅРµ РІ СЃРµС‚Рё" );
+				return player[ playerid ].message( "Игрок " + id.tointeger( ) + " не в сети" );
 			}
 			
             player[ id.tointeger( ) ].setHealth( hp.tofloat() );
         } else {
-            sendPlayerMessage( playerid, youCanNot );
+            player[ playerid ].message( youCanNot );
         }
     }
 );
@@ -285,9 +283,9 @@ addCommandHandler( "sethp",
 addCommandHandler( "ooc",
 	function( playerid, text ) {
         if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
-            sendPlayerMessageToAll( "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ: " + player[ playerid ].getName( ) + " [ " + playerid + " ]: " + text.tostring( ) );
+            sendPlayerMessageToAll( "Администратор: " + player[ playerid ].getName( ) + " [ " + playerid + " ]: " + text.tostring( ) );
         } else {
-            sendPlayerMessage( playerid, youCanNot );
+            player[ playerid ].message( youCanNot );
         }
 	}
 );
@@ -295,14 +293,14 @@ addCommandHandler( "ooc",
 addCommandHandler( "vehicle",
     function( playerid, ... ) {
         if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
-   		local 	id 	= vargv[ 0 ] ,
-			pos 	= getPlayerPosition( playerid ) ,
-			vehicle = createVehicle( id.tointeger(), pos[0] + 2.0, pos[1], pos[2] + 1.0, 0.0, 0.0, 0.0 );
+   		local 	id 		= vargv[ 0 ] ,
+				pos 	= getPlayerPosition( playerid ) ,
+				vehicle = createVehicle( id.tointeger(), pos[0] + 2.0, pos[1], pos[2] + 1.0, 0.0, 0.0, 0.0 );
 					
-    		setVehicleColour ( vehicle, 255, 0, 255, 0, 255, 255 );
+		setVehicleColour ( vehicle, 255, 0, 255, 0, 255, 255 );
         } else {
-            sendPlayerMessage( playerid, youCanNot );
-	}
+            player[ playerid ].message( youCanNot );
+		}
     }
 );
 
@@ -310,14 +308,14 @@ addCommandHandler( "setadmin",
     function( playerid, id ) {
         if ( playerData[ playerid ].Admin.tointeger() > 0 ) {
 		if ( !isPlayerConnected( id.tointeger( ) ) ) { 
-			return sendPlayerMessage( playerid, "РРіСЂРѕРє " + id.tointeger( ) + " РЅРµ РІ СЃРµС‚Рё" );
+			return player[ playerid ].message( "Игрок " + id.tointeger( ) + " не в сети" );
 		}
 			
 		playerData[ id.tointeger( ) ].Admin = 1;
-            	sendPlayerMessage( id.tointeger( ), "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ " + player[ playerid ].getName( ) + " РЅР°Р·РЅР°С‡РёР» РІР°СЃ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂРѕРј!" );
-		sendPlayerMessage( playerid, "Р’С‹ РЅР°Р·РЅР°С‡РёР»Рё Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂРѕРј " + player[ id.tointeger( ) ].getName( ) );
+		player[ id.tointeger( ) ].message( "Администратор " + player[ playerid ].getName( ) + " назначил вас администратором!" );
+		player[ playerid ].message( "Вы назначили администратором " + player[ id.tointeger( ) ].getName( ) );
         } else {
-            sendPlayerMessage( playerid, youCanNot );
-	}
+            player[ playerid ].message( youCanNot );
+		}
     }
 );
