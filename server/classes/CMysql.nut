@@ -66,6 +66,5 @@ class CMySQL {
 			this.free( );
 			return 0;
 		}
-		return !!this.iN;
 	}
 };
