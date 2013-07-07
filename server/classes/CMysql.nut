@@ -59,13 +59,13 @@ class CMySQL {
 			return -1;
 		}
 		this.store( );
-		
+		this.fetch( );
 		if ( this.iN == 1 ) { 
-			this.fetch( );
 			return 1; 
 		} else {
 			this.free( );
 			return 0;
 		}
+		return !!this.iN;
 	}
 };
