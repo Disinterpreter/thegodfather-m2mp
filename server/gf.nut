@@ -187,14 +187,14 @@ addCommandHandler( "login",
 addCommandHandler( "kick",
 	function( playerid, ... ) {
 		if ( playerData[ playerid ].Admin.tointeger( ) > 0 ) {
-			if ( vargv.len( ) < 2 ) return sendPlayerMessage( playerid, "Используйте /kick [id игрока] [Причина]",205, 85, 85 );
+			if ( vargv.len( ) < 2 ) return player[ playerid ].message( "Используйте /kick [id игрока] [Причина]",205, 85, 85 );
 			if ( !isPlayerConnected( vargv[ 0 ].tointeger( ) ) ) return player[ playerid ].message( "Игрок " + vargv[ 0 ].tointeger() + " не в сети" );
 			local text = "";
 			for ( local i = 0; i < vargv.len( ); i++ ){
 				text = text + " " + vargv[ i ];
 			}
 			sendPlayerMessageToAll( "Администратор '" + player[ playerid ].getName( ) + "' кикнул '" + player[ vargv[ 0 ].tointeger( ) ].getName( ) + "'! Причина: '" + text.tostring() + "'");
-			kickPlayer( vargv[ 0 ].tointeger( ) ) ;
+			player[ vargv[ 0 ].tointeger( ) ].kick ();
 		}
 	}
 );

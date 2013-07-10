@@ -75,4 +75,7 @@ class CPlayer {
 	function setColor ( sColor ) {
 		return setPlayerColour( this.m_iID, sColor );
 	}
+	function kick ( ) {
+		return kickPlayer ( this.m_iID );
+	}
 };
